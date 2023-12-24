@@ -17,17 +17,27 @@ except:
 lcd = Adafruit_CharLCD(pin_rs=0, pin_e=2, pins_db=[4,5,6,7], GPIO=mcp)
 mcp.output(3,1)     # turn on LCD backlight
 lcd.begin(16,2)     # set number of LCD lines and columns
+
+
 time_white = "00:00"
 time_black = "00:00"
-def loop():
-    lcd.setCursor(0,0)
-    lcd.message('White:     ' + time_white + '\n')
-    lcd.message('Black:     ' + time_black + '\n')
-    sleep(0.5)
 
+         
+def loop(t):
+    while t:
+        lcd.setCursor(0,0)
+        mins, secs = divmod(t, 60) 
+        timer = '{:02d}:{:02d}'.format(mins, secs)
+
+        lcd.message('White:     ' + timer + '\n')
+        lcd.message('Black:     ' + timer + '\n')
+        t -= 1
+        sleep(1)
+def destroy():
+    lcd.clear()
 if __name__ == '__main__':
     print ('Program is starting ... ')
     try:
-        loop()
+        loop(int(600))
     except KeyboardInterrupt:
         destroy()
